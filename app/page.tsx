@@ -46,15 +46,12 @@ export default function Dashboard() {
   const iq = iqFromState(state);
 
 
-  // Мотивиращ ред според състоянието на ученика
-  const motivator =
-    state.streak >= 7
-      ? `🔥 ${state.streak} дни без прекъсване — ти си истинска легенда!`
-      : state.streak >= 3
-      ? `🔥 ${state.streak} поредни дни — задръж темпото и серията расте!`
-      : missionDone
-      ? "Днес вече учи — браво! Готов ли си за още едно предизвикателство?"
-      : "Готов ли си да станеш финансов герой днес?";
+  // Какви постижения може да спечели ученикът днес
+  const todayGoals = [
+    { label: "Завърши урок", xp: 30, done: missionDone, Icon: BookOpen },
+    { label: "Дневен въпрос", xp: 40, done: dailyDone, Icon: Sparkles },
+    { label: "Спечели дуел", xp: 150, done: false, Icon: Swords },
+  ];
 
   return (
     <div className="flex flex-col gap-5">
@@ -64,14 +61,39 @@ export default function Dashboard() {
           <CardContent className="relative flex flex-col gap-3 pt-5 pb-5 md:gap-4 md:pt-6 md:pb-6">
             <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
 
-            {/* Текст + статус — компактно */}
-            <div className="relative z-10">
+            {/* Маскот Аликс */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/mascot-hero.png"
+              alt="Аликс"
+              draggable={false}
+              className="pointer-events-none absolute bottom-0 right-2 z-10 hidden h-[150px] w-auto select-none drop-shadow-xl sm:block md:right-8 md:h-[186px]"
+            />
+
+            {/* Текст + постижения за днес */}
+            <div className="relative z-10 sm:pr-40 md:pr-56">
               <h1 className="text-2xl font-extrabold leading-tight md:text-3xl">
                 Здравей, {state.name}! 👋
               </h1>
-              <p className="mt-1 text-sm font-semibold text-white/90">{motivator}</p>
+              <p className="mt-1 text-sm font-semibold text-white/85">Какви постижения можеш да спечелиш днес:</p>
 
-              {/* Ключови статистики в един ред */}
+              {/* Постижения за днес */}
+              <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                {todayGoals.map((g) => (
+                  <span
+                    key={g.label}
+                    className={cn(
+                      "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold",
+                      g.done ? "bg-white/30" : "bg-white/15"
+                    )}
+                  >
+                    {g.done ? <CheckCircle2 size={12} className="text-emerald-200" /> : <g.Icon size={12} />}
+                    {g.label} <span className="font-semibold text-white/70">+{g.xp} XP</span>
+                  </span>
+                ))}
+              </div>
+
+              {/* Ключови статистики */}
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
                 <span className="flex items-center gap-1 rounded-full bg-white/15 px-2.5 py-1 text-xs font-bold tabular-nums">
                   Ниво {level}
