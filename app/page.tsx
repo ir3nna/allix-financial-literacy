@@ -56,19 +56,10 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col gap-5">
       {/* ── Скъсена HERO секция ── */}
-      <motion.div initial={{ y: 10 }} animate={{ y: 0 }}>
+      <motion.div initial={{ y: 10 }} animate={{ y: 0 }} className="relative">
         <Card className="overflow-hidden border-none bg-gradient-to-br from-allianz to-allianz-dark text-white shadow-lg shadow-allianz/25">
           <CardContent className="relative flex flex-col gap-3 pt-5 pb-5 md:gap-4 md:pt-6 md:pb-6">
             <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
-
-            {/* Маскот Аликс */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/mascot-hero.png"
-              alt="Аликс"
-              draggable={false}
-              className="pointer-events-none absolute bottom-0 right-2 z-10 hidden h-[150px] w-auto select-none drop-shadow-xl sm:block md:right-8 md:h-[186px]"
-            />
 
             {/* Текст + постижения за днес */}
             <div className="relative z-10 sm:pr-40 md:pr-56">
@@ -108,6 +99,15 @@ export default function Dashboard() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Маскот Аликс — изкача извън синята лента отгоре и отдолу */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/mascot-hero.png"
+          alt="Аликс"
+          draggable={false}
+          className="pointer-events-none absolute right-3 top-1/2 z-20 hidden h-[200px] w-auto -translate-y-1/2 select-none drop-shadow-xl sm:block md:right-8 md:h-[230px]"
+        />
       </motion.div>
 
       {/* ── Продължи от тук ── */}
