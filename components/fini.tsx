@@ -1,6 +1,6 @@
 "use client";
 
-// 🦅 Фини — плаващ AI помощник, достъпен от всяка страница.
+// 🦅 Аликс — плаващ AI помощник, достъпен от всяка страница.
 // Демо: отговаря от локална база знания (lib/fini.ts); готов за LLM интеграция.
 
 import { useEffect, useRef, useState } from "react";
@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 
 type Message = { from: "fini" | "me"; text: string };
 
-// Балонче на Фини за вграждане в уроци/дуели
+// Балонче на Аликс за вграждане в уроци/дуели
 export function FiniBubble({ children, tone = "info" }: { children: React.ReactNode; tone?: "info" | "success" | "warn" }) {
   return (
     <div className="flex items-start gap-3">
@@ -85,7 +85,7 @@ export function FiniWidget() {
       {/* Плаващ бутон */}
       <button
         onClick={() => setOpen((o) => !o)}
-        aria-label={open ? "Затвори Фини" : "Отвори Фини — финансовия помощник"}
+        aria-label={open ? "Затвори Аликс" : "Отвори Аликс — финансовия помощник"}
         className={cn(
           "fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all cursor-pointer md:bottom-6 md:right-6",
           open
@@ -113,7 +113,7 @@ export function FiniWidget() {
               </div>
               <div>
                 <div className="font-extrabold leading-tight">{FINI.name}</div>
-                <div className="text-xs font-semibold text-white/75">{FINI.title} · помага да мислиш, не оценява</div>
+                <div className="text-xs font-semibold text-white/75">{FINI.title}</div>
               </div>
             </div>
 
@@ -137,7 +137,7 @@ export function FiniWidget() {
               )}
               {typing && (
                 <div className="flex items-center gap-2 text-sm font-semibold text-muted">
-                  <Mascot size={20} /> Фини пише…
+                  <Mascot size={20} /> Аликс пише…
                 </div>
               )}
             </div>
@@ -166,7 +166,7 @@ export function FiniWidget() {
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Попитай Фини…"
+                placeholder="Попитай Аликс…"
                 className="flex-1 rounded-xl border-2 border-line bg-soft/50 px-3.5 py-2.5 text-sm font-medium outline-none transition-colors focus:border-allianz"
               />
               <button

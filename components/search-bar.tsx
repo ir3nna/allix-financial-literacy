@@ -33,7 +33,7 @@ export function SearchBar({ className }: { className?: string }) {
       {q && (
         <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-line bg-card shadow-soft">
           {lessonResults.length === 0 && termResults.length === 0 ? (
-            <p className="p-4 text-sm font-medium text-muted">Нищо не открих — питай Фини!</p>
+            <p className="p-4 text-sm font-medium text-muted">Нищо не открих — питай Аликс!</p>
           ) : (
             <>
               {lessonResults.map((l) => {

@@ -43,7 +43,7 @@ export default function LessonPage({ params }: { params: Promise<{ lessonId: str
   const [choicePicked, setChoicePicked] = useState<number | null>(null);
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizAnswer, setQuizAnswer] = useState<number | null>(null);
-  const [wrongFirstTry, setWrongFirstTry] = useState<number | null>(null); // сгрешен първи опит (за втория шанс от Фини)
+  const [wrongFirstTry, setWrongFirstTry] = useState<number | null>(null); // сгрешен първи опит (за втория шанс от Аликс)
   const [totalCorrect, setTotalCorrect] = useState(0);
   const [firstTryCorrect, setFirstTryCorrect] = useState(0);
   const [finiLine, setFiniLine] = useState("");
@@ -97,7 +97,7 @@ export default function LessonPage({ params }: { params: Promise<{ lessonId: str
     }
   };
 
-  // Втори шанс от Фини: скрива сгрешения отговор и пуска нов опит
+  // Втори шанс от Аликс: скрива сгрешения отговор и пуска нов опит
   const retryQuestion = () => {
     setWrongFirstTry(quizAnswer);
     setQuizAnswer(null);
@@ -322,7 +322,7 @@ export default function LessonPage({ params }: { params: Promise<{ lessonId: str
                     const answered = quizAnswer !== null;
                     const isCorrect = i === question.correct;
                     const isPicked = quizAnswer === i;
-                    const eliminated = wrongFirstTry === i && !answered; // скрит от Фини след грешен първи опит
+                    const eliminated = wrongFirstTry === i && !answered; // скрит от Аликс след грешен първи опит
                     return (
                       <button
                         key={i}
@@ -345,7 +345,7 @@ export default function LessonPage({ params }: { params: Promise<{ lessonId: str
                   })}
                 </div>
 
-                {/* Подсказка от Фини при активен втори опит */}
+                {/* Подсказка от Аликс при активен втори опит */}
                 {quizAnswer === null && wrongFirstTry !== null && (
                   <div className="mt-4">
                     <FiniBubble tone="warn">

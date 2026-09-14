@@ -1,4 +1,4 @@
-// Маскот на платформата — Фини (орелът). Растерна илюстрация с прозрачен фон.
+// Маскот на платформата — Аликс (орелът). Растерна илюстрация с прозрачен фон.
 
 import { cn } from "@/lib/utils";
 
@@ -7,7 +7,7 @@ export function Mascot({ size = 32, className }: { size?: number; className?: st
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src="/mascot.png"
-      alt="Фини"
+      alt="Аликс"
       className={cn("select-none object-contain", className)}
       style={{ width: size, height: size }}
       draggable={false}

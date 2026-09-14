@@ -77,7 +77,7 @@ export default function GlossaryPage() {
       {grouped.length === 0 && (
         <Card>
           <CardContent className="pt-5 text-center text-sm font-medium text-muted">
-            Няма намерени термини за „{query}“. Пробвай с друга дума — или питай Фини!
+            Няма намерени термини за „{query}“. Пробвай с друга дума — или питай Аликс!
           </CardContent>
         </Card>
       )}
