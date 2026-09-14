@@ -184,7 +184,7 @@ export function Nav() {
                     : "text-muted hover:bg-soft hover:text-fg"
                 )}
               >
-                <Icon size={20} strokeWidth={active ? 2.5 : 2} />
+                <Icon size={20} strokeWidth={active ? 2.5 : 2} className={active ? "text-blue-200" : "text-allianz/60"} />
                 {collapsed ? <Tip label={label} /> : label}
               </Link>
             );
@@ -231,7 +231,7 @@ export function Nav() {
                     : "text-muted hover:bg-soft hover:text-fg"
                 )}
               >
-                <Icon size={22} strokeWidth={active ? 2.5 : 2} />
+                <Icon size={22} strokeWidth={active ? 2.5 : 2} className={active ? "text-blue-200" : "text-allianz/60"} />
                 {collapsed ? <Tip label={label} /> : label}
               </Link>
             );
