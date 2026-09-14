@@ -37,6 +37,10 @@ export const GRADE_LEVELS: { key: GradeLevel; label: string; grade: string; math
 export const gradeLevelInfo = (key: GradeLevel) =>
   GRADE_LEVELS.find((l) => l.key === key) ?? GRADE_LEVELS[0];
 
+// Игрив таг за трудността на модула (по requiredLevel)
+export const worldTierLabel = (requiredLevel: number) =>
+  requiredLevel <= 2 ? "Загрявка" : requiredLevel <= 10 ? "Изпитание" : "Босово ниво";
+
 export type Lesson = {
   id: string;
   worldId: number;

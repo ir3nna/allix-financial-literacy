@@ -4,12 +4,13 @@
 // прогрес и любими уроци (♥)
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Lock, CheckCircle2, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Thiing } from "@/components/thiing";
 import { useGame } from "@/lib/game-state";
-import { WORLDS, LESSONS, GRADE_LEVELS, gradeLevelInfo, type World } from "@/lib/data";
+import { WORLDS, LESSONS, GRADE_LEVELS, gradeLevelInfo, worldTierLabel, type World } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 // Илюстрация на света: 3D изображение (public/worlds/*.png), а при липса/грешка — Thiings иконка.
@@ -90,10 +91,11 @@ export default function LearnPage() {
               transition={{ delay: i * 0.05 }}
               className="h-full"
             >
+              <Link href={`/learn/${world.id}`} className="block h-full">
               <Card
                 className={cn(
                   "group flex h-full flex-col overflow-hidden transition-all duration-300 ease-out",
-                  unlocked ? "hover:-translate-y-1 hover:shadow-xl" : "opacity-65 grayscale-[50%]"
+                  unlocked ? "hover:-translate-y-1 hover:shadow-xl cursor-pointer" : "opacity-65 grayscale-[50%]"
                 )}
               >
                 {/* Илюстрация на света */}
@@ -105,7 +107,7 @@ export default function LearnPage() {
 
                   {/* Таг за ниво (горе вдясно) */}
                   <span className="absolute right-3 top-3 inline-flex rounded-full bg-white/85 px-2.5 py-1 text-[11px] font-bold text-fg shadow-sm backdrop-blur">
-                    {world.requiredLevel <= 2 ? "Начинаещ" : world.requiredLevel <= 10 ? "Средно" : "Продвинат"}
+                    {worldTierLabel(world.requiredLevel)}
                   </span>
 
                   {/* Завършен / заключен */}
@@ -139,6 +141,7 @@ export default function LearnPage() {
                   </div>
                 </CardContent>
               </Card>
+              </Link>
             </motion.div>
           );
         })}
