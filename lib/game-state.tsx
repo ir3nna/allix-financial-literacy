@@ -41,7 +41,7 @@ export type GameState = {
 };
 
 const DEFAULT_STATE: GameState = {
-  name: "Алекс",
+  name: "Ивайло",
   avatar: "fox",
   xp: 2600,
   streak: 3,
