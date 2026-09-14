@@ -75,12 +75,15 @@ export function Nav() {
   );
 
   const sidebarHeader = (
-    <div className={cn("mb-6 flex", collapsed ? "h-8 justify-center" : "items-center pl-2 pt-1")}>
-      {!collapsed && (
-        <Link href="/">
+    <div className={cn("mb-6 flex", collapsed ? "justify-center pt-1" : "items-center pl-2 pt-1")}>
+      <Link href="/" className="block">
+        {collapsed ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src="/allix-mark.png" alt="Allix" className="h-11 w-auto" draggable={false} />
+        ) : (
           <Logo />
-        </Link>
-      )}
+        )}
+      </Link>
     </div>
   );
 
