@@ -22,7 +22,7 @@ function WorldImage({ world }: { world: World }) {
         src={world.image}
         alt={world.name}
         onError={() => setFailed(true)}
-        className="h-full w-full object-contain p-6 transition-transform duration-500 ease-out group-hover:scale-105"
+        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
         draggable={false}
       />
     );
@@ -99,9 +99,7 @@ export default function LearnPage() {
                 {/* Илюстрация на света */}
                 <div
                   className="relative aspect-[4/3] shrink-0 overflow-hidden"
-                  style={{
-                    background: `radial-gradient(120% 120% at 50% 15%, ${world.color}33, ${world.color}14 55%, ${world.color}0d)`,
-                  }}
+                  style={{ backgroundColor: `${world.color}14` }}
                 >
                   <WorldImage world={world} />
 
