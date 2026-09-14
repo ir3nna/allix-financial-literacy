@@ -75,27 +75,25 @@ export function Nav() {
   );
 
   const sidebarHeader = (
-    <div className={cn("mb-6 flex", collapsed ? "justify-center" : "items-start justify-between gap-2 pl-2 pt-1")}>
+    <div className={cn("mb-6 flex", collapsed ? "h-8 justify-center" : "items-center pl-2 pt-1")}>
       {!collapsed && (
         <Link href="/">
           <Logo />
         </Link>
       )}
-      <button
-        onClick={() => updateSettings({ sidebarCollapsed: !collapsed })}
-        aria-label={collapsed ? "Разгъни менюто" : "Свий менюто"}
-        aria-expanded={!collapsed}
-        className={cn(
-          "group/nav relative shrink-0 cursor-pointer rounded-xl p-2 text-allianz transition-colors hover:bg-soft hover:text-allianz-dark",
-          // Разгънат: център на реда "Allianz" (не на цялото лого — "ACADEMY" виси отдолу).
-          // Свит: център на търсачката в хедъра.
-          collapsed ? "mt-3.5" : "mt-0.5"
-        )}
-      >
-        {collapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
-        {collapsed && <Tip label="Разгъни менюто" />}
-      </button>
     </div>
+  );
+
+  // Бутон за свиване/разгъване — стои на десния ръб на сайдбара и излиза наполовина
+  const collapseHandle = (
+    <button
+      onClick={() => updateSettings({ sidebarCollapsed: !collapsed })}
+      aria-label={collapsed ? "Разгъни менюто" : "Свий менюто"}
+      aria-expanded={!collapsed}
+      className="absolute right-0 top-10 z-50 flex h-10 w-10 -translate-y-1/2 translate-x-1/2 cursor-pointer items-center justify-center rounded-full border border-line bg-card text-allianz shadow-md transition-colors hover:bg-soft hover:text-allianz-dark"
+    >
+      {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+    </button>
   );
 
   const themeToggle = collapsed ? (
@@ -162,6 +160,7 @@ export function Nav() {
   if (portal) {
     return (
       <aside className={asideClass}>
+        {collapseHandle}
         {sidebarHeader}
 
         {!collapsed && (
@@ -215,6 +214,7 @@ export function Nav() {
     <>
       {/* Странична лента — десктоп (Duolingo-стил: едри бутони с рамка на активния) */}
       <aside className={asideClass}>
+        {collapseHandle}
         {sidebarHeader}
         <nav className="flex flex-col gap-3">
           {ITEMS.filter((i) => i.href !== "/profile").map(({ href, label, icon: Icon }) => {
