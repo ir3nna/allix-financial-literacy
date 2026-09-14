@@ -106,7 +106,7 @@ export default function Dashboard() {
           src="/mascot-hero.png"
           alt="Аликс"
           draggable={false}
-          className="pointer-events-none absolute right-3 top-1/2 z-20 hidden h-[200px] w-auto -translate-y-[62%] select-none drop-shadow-xl sm:block md:right-8 md:h-[230px]"
+          className="pointer-events-none absolute right-3 top-1/2 z-20 hidden h-[200px] w-auto -translate-y-[57%] select-none drop-shadow-xl sm:block md:right-8 md:h-[230px]"
         />
       </motion.div>
 
