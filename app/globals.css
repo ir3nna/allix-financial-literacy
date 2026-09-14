@@ -1,0 +1,156 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Manrope — самостоятелно хостнат variable шрифт (тегла 200–800) */
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/fonts/manrope-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/fonts/manrope-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Семантични токени — стойностите се сменят от .dark и data-accent */
+:root {
+  --surface: #eef2fb;
+  --card: #ffffff;
+  --line: #e8edf6;
+  --fg: #131a2b;
+  --muted: #6b7688;
+  --soft: #e9eef8;
+
+  --accent: #0057ff;
+  --accent-dark: #0041bd;
+  --accent-light: #4da3ff;
+
+  /* Меки сенки за дълбочина вместо твърди рамки */
+  --shadow-soft: 0 1px 2px rgba(20, 30, 55, 0.04), 0 8px 24px -12px rgba(20, 30, 55, 0.14);
+  --shadow-hover: 0 2px 4px rgba(20, 30, 55, 0.05), 0 18px 40px -16px rgba(20, 30, 55, 0.22);
+
+  /* Ширина на сайдбара — сменя се при свиване (виж components/nav.tsx) */
+  --sidebar-w: 16rem;
+}
+
+.dark {
+  --surface: #0c1220;
+  --card: #151d30;
+  --line: #232e46;
+  --fg: #e7edf8;
+  --muted: #93a2bd;
+  --soft: #1a2338;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.2), 0 10px 30px -14px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.25), 0 20px 44px -16px rgba(0, 0, 0, 0.6);
+}
+
+[data-accent="green"] {
+  --accent: #059669;
+  --accent-dark: #047857;
+  --accent-light: #34d399;
+}
+
+[data-accent="purple"] {
+  --accent: #7c3aed;
+  --accent-dark: #6d28d9;
+  --accent-light: #a78bfa;
+}
+
+[data-accent="orange"] {
+  --accent: #ea580c;
+  --accent-dark: #c2410c;
+  --accent-light: #fb923c;
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-soft: var(--soft);
+
+  --color-allianz: var(--accent);
+  --color-allianz-dark: var(--accent-dark);
+  --color-allianz-light: var(--accent-light);
+}
+
+@theme {
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  /* Лек цветен градиент вместо плосък фон — добавя дълбочина като в референтните дизайни */
+  background:
+    radial-gradient(1200px 600px at 100% -5%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
+    var(--surface);
+  background-attachment: fixed;
+  color: var(--fg);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Меки сенки за карти — заместват твърдите рамки */
+.shadow-soft { box-shadow: var(--shadow-soft); }
+.shadow-soft-hover:hover { box-shadow: var(--shadow-hover); }
+
+/* ─── Къстъм анимации ─── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-12px) rotate(4deg); }
+}
+@keyframes pop-in {
+  0% { transform: scale(0.6); opacity: 0.4; }
+  80% { transform: scale(1.06); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes flame-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18) rotate(-3deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .animate-float { animation: float 3.5s ease-in-out infinite; }
+  .animate-float-slow { animation: float-slow 5s ease-in-out infinite; }
+  .animate-pop { animation: pop-in 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) both; }
+  .animate-flame { animation: flame-pulse 1.6s ease-in-out infinite; }
+}
+
+/* Декоративна точкова шарка за градиентни карти */
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.22) 1.5px, transparent 1.5px);
+  background-size: 18px 18px;
+}
+
+/* Скролбар с мек стил */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--muted) 40%, transparent);
+  border-radius: 8px;
+}
