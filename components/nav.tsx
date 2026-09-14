@@ -148,7 +148,7 @@ export function Nav() {
               isActive(href) ? "bg-allianz/10 text-allianz" : "text-muted hover:bg-soft hover:text-fg"
             )}
           >
-            <Icon size={16} />
+            <Icon size={16} className="text-allianz" />
             {collapsed ? <Tip label={label} /> : label}
           </Link>
         ))}
@@ -180,7 +180,7 @@ export function Nav() {
                   collapsed ? "justify-center py-2.5" : "gap-3 px-4 py-2.5",
                   active
                     ? "bg-allianz text-white shadow-lg shadow-allianz/30"
-                    : "text-muted hover:bg-soft hover:text-fg"
+                    : "text-fg hover:bg-soft"
                 )}
               >
                 <Icon size={20} strokeWidth={active ? 2.5 : 2} className={active ? "text-blue-200" : "text-allianz/60"} />
@@ -228,7 +228,7 @@ export function Nav() {
                   collapsed ? "justify-center py-3" : "gap-3 px-4 py-3",
                   active
                     ? "bg-allianz text-white shadow-lg shadow-allianz/30"
-                    : "text-muted hover:bg-soft hover:text-fg"
+                    : "text-fg hover:bg-soft"
                 )}
               >
                 <Icon size={22} strokeWidth={active ? 2.5 : 2} className={active ? "text-blue-200" : "text-allianz/60"} />
