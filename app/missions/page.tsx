@@ -538,17 +538,15 @@ export default function MissionsPage() {
         disabled={dailyDone}
         className={cn("text-left", !dailyDone && "cursor-pointer transition-transform hover:scale-[1.01]")}
       >
+        <div className="relative">
         <Card className={cn(
           "overflow-hidden text-white",
           dailyDone
             ? "bg-gradient-to-br from-success to-green-700"
             : "border-allianz/30 bg-gradient-to-br from-allianz to-allianz-dark"
         )}>
-          <CardContent className="relative pt-5 pb-5">
+          <CardContent className="relative pt-5 pb-5 sm:pr-44 md:pr-56">
             <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
-            <div className="animate-float-slow pointer-events-none absolute -right-3 -top-3 opacity-30 select-none">
-              <Thiing name="target" size={110} />
-            </div>
             <div className="relative">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-white/70">
                 <Zap size={14} /> Дневно предизвикателство
@@ -576,6 +574,16 @@ export default function MissionsPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Маскот Аликс — стрелец, изкача извън синята лента (както на Начало) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/mascots/archer.png"
+          alt="Аликс"
+          draggable={false}
+          className="pointer-events-none absolute right-2 top-1/2 z-20 hidden h-[150px] w-auto -translate-y-1/2 select-none drop-shadow-xl sm:block md:right-6 md:h-[180px]"
+        />
+        </div>
       </button>
 
       {/* Практически мисии */}
