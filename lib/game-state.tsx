@@ -104,6 +104,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         const emojiAvatars: Record<string, string> = { "🦊": "fox", "🐻": "bear", "🐱": "cat", "🦉": "owl", "🐼": "panda", "🦁": "lion", "🐺": "wolf", "🦅": "eagle", "🐯": "tiger", "🦈": "shark", "🦋": "butterfly", "🐸": "frog" };
         if (emojiAvatars[saved.avatar]) saved.avatar = emojiAvatars[saved.avatar];
         else if (!/^[a-z-]+$/.test(saved.avatar)) saved.avatar = "fox";
+        // Миграция: демо-ученикът беше преименуван Алекс → Ивайло
+        if (saved.name === "Алекс") saved.name = DEFAULT_STATE.name;
         // Обновяване на серията при ново отваряне
         const today = todayStr();
         if (saved.lastActiveDate && saved.lastActiveDate !== today) {
