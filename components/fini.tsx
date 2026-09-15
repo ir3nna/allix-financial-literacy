@@ -104,13 +104,18 @@ export function FiniWidget() {
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Затвори Аликс" : "Отвори Аликс — финансовия помощник"}
         className={cn(
-          "fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all cursor-pointer md:bottom-6 md:right-6",
+          "fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full shadow-lg transition-all cursor-pointer md:bottom-6 md:right-6",
           open
             ? "bg-allianz shadow-allianz/40"
             : "bg-allianz/10 ring-2 ring-allianz/25 shadow-allianz/20 hover:scale-110 active:scale-95 animate-float dark:bg-allianz/20"
         )}
       >
-        {open ? <X size={26} className="text-white" /> : <Mascot size={52} className="drop-shadow-sm" />}
+        {open ? (
+          <X size={26} className="text-white" />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src="/aliks-avatar.png" alt="Аликс" className="h-full w-full object-cover" draggable={false} />
+        )}
       </button>
 
       {/* Чат панел */}
