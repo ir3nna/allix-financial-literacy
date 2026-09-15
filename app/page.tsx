@@ -60,6 +60,11 @@ export default function Dashboard() {
         <Card className="overflow-hidden border-none bg-gradient-to-br from-allianz to-allianz-dark text-white shadow-lg shadow-allianz/25">
           <CardContent className="relative flex flex-col gap-3 pt-5 pb-5 md:gap-4 md:pt-6 md:pb-6">
             <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
+            {/* Меко изсветляване към маскота (вдясно) */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{ background: "radial-gradient(60% 130% at 88% 42%, rgba(255,255,255,0.30), rgba(255,255,255,0.10) 34%, transparent 62%)" }}
+            />
 
             {/* Текст + постижения за днес */}
             <div className="relative z-10 sm:pr-40 md:pr-56">

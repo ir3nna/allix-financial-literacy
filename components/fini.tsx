@@ -8,29 +8,46 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send } from "lucide-react";
 import { Thiing } from "@/components/thiing";
-import { Mascot } from "@/components/mascot";
+import { Mascot, type MascotPose } from "@/components/mascot";
 import { useGame } from "@/lib/game-state";
 import { FINI, FINI_QUICK_QUESTIONS, finiReply } from "@/lib/fini";
 import { cn } from "@/lib/utils";
 
 type Message = { from: "fini" | "me"; text: string };
 
-// Балонче на Аликс за вграждане в уроци/дуели
-export function FiniBubble({ children, tone = "info" }: { children: React.ReactNode; tone?: "info" | "success" | "warn" }) {
+// Балонче на Аликс за вграждане в уроци/дуели — едро и забележимо, защото съветът е важен.
+// Аликс сочи към текста (палец нагоре при успех). Позата може да се подаде изрично.
+export function FiniBubble({
+  children,
+  tone = "info",
+  pose,
+}: {
+  children: React.ReactNode;
+  tone?: "info" | "success" | "warn";
+  pose?: MascotPose;
+}) {
+  const effPose: MascotPose = pose ?? (tone === "success" ? "thumb" : "point");
   return (
-    <div className="flex items-start gap-3">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-allianz/10 p-1">
-        <Mascot size={32} />
-      </div>
+    <div className="flex items-start gap-2 sm:gap-3">
+      <Mascot pose={effPose} size={80} className="-mb-1 shrink-0 drop-shadow-sm" />
       <div
         className={cn(
-          "rounded-2xl rounded-tl-sm p-3.5 text-sm font-medium leading-relaxed",
-          tone === "success" && "bg-success/10 text-green-800 dark:text-green-300",
-          tone === "warn" && "bg-warning/10 text-amber-800 dark:text-amber-300",
-          tone === "info" && "bg-soft text-fg/90"
+          "relative mt-1 flex-1 rounded-2xl rounded-tl-sm border p-4 text-base font-medium leading-relaxed shadow-sm",
+          tone === "success" && "border-success/30 bg-success/10 text-green-800 dark:text-green-300",
+          tone === "warn" && "border-warning/30 bg-warning/10 text-amber-800 dark:text-amber-300",
+          tone === "info" && "border-line bg-card text-fg/90"
         )}
       >
-        <span className="mb-0.5 block text-xs font-extrabold text-allianz">{FINI.name}</span>
+        {/* Опашка на балончето към Аликс */}
+        <span
+          className={cn(
+            "absolute -left-1.5 top-4 h-3 w-3 rotate-45 border-b border-l",
+            tone === "success" && "border-success/30 bg-success/10",
+            tone === "warn" && "border-warning/30 bg-warning/10",
+            tone === "info" && "border-line bg-card"
+          )}
+        />
+        <span className="mb-1 block text-xs font-extrabold uppercase tracking-wide text-allianz">{FINI.name}</span>
         {children}
       </div>
     </div>

@@ -17,6 +17,8 @@ import { FINI_ENCOURAGEMENTS, FINI_PRAISE, randomFrom } from "@/lib/fini";
 import { iqFromState, iqTitle } from "@/lib/iq";
 import { FiniBubble } from "@/components/fini";
 import { Thiing } from "@/components/thiing";
+import { Mascot } from "@/components/mascot";
+import { DoodleBg } from "@/components/doodle-bg";
 import { cn } from "@/lib/utils";
 
 type Step = "story" | "concept" | "interaction" | "quiz" | "reward";
@@ -103,375 +105,409 @@ export default function LessonPage({ params }: { params: Promise<{ lessonId: str
     setQuizAnswer(null);
   };
 
+  const progressPct = ((stepIndex + (step === "quiz" ? quizIndex / lesson.quiz.length : 0)) / (STEPS.length - 1)) * 100;
+
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
-      {/* Заглавна лента с прогрес */}
-      <div className="flex items-center gap-3">
-        <Link href="/learn" className="rounded-full p-2 text-muted hover:bg-soft">
-          <X size={20} />
-        </Link>
-        <div className="flex-1">
-          <div className="text-xs font-semibold text-muted">{world.name}</div>
-          <div className="font-bold leading-tight">{lesson.title}</div>
-        </div>
-        <button
-          aria-label={state.favorites.includes(lesson.id) ? "Премахни от любими" : "Добави в любими"}
-          onClick={() => toggleFavorite(lesson.id)}
-          className="rounded-full p-2 transition-transform cursor-pointer hover:scale-125"
-        >
-          <Heart
-            size={20}
-            className={state.favorites.includes(lesson.id) ? "fill-danger text-danger animate-pop" : "text-muted/60"}
-          />
-        </button>
-        <span className="text-xs font-semibold tabular-nums text-muted">
-          {stepIndex + 1} / {STEPS.length}
-        </span>
-      </div>
-      <Progress value={((stepIndex + (step === "quiz" ? quizIndex / lesson.quiz.length : 0)) / (STEPS.length - 1)) * 100} />
+    <div className="w-full">
+      {/* Всичко е събрано в една голяма карта с рисуван doodle фон */}
+      <Card className="relative overflow-hidden">
+        {/* Мек цветен градиент на света */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `linear-gradient(160deg, color-mix(in srgb, ${world.color} 9%, var(--card)) 0%, var(--card) 55%)`,
+          }}
+        />
+        {/* Рисувани драсканици (финансови символи) */}
+        <DoodleBg color={world.color} />
 
-      {/* Индикатор на стъпките */}
-      <div className="flex justify-between px-1">
-        {STEPS.map((s, i) => {
-          const Icon = STEP_META[s].icon;
-          return (
-            <div
-              key={s}
-              className={cn(
-                "flex flex-col items-center gap-1 text-[10px] font-semibold",
-                i <= stepIndex ? "text-allianz" : "text-muted/50"
-              )}
+        <CardContent className="relative p-4 sm:p-6 lg:p-8">
+          {/* ── Горна лента: изход · стъпка · любими ── */}
+          <div className="mb-6 flex items-center gap-2">
+            <Link href="/learn" className="rounded-full p-2 text-muted transition-colors hover:bg-soft hover:text-fg">
+              <X size={20} />
+            </Link>
+            <span className="flex-1 text-xs font-semibold tabular-nums text-muted">
+              Стъпка {stepIndex + 1} / {STEPS.length}
+            </span>
+            <button
+              aria-label={state.favorites.includes(lesson.id) ? "Премахни от любими" : "Добави в любими"}
+              onClick={() => toggleFavorite(lesson.id)}
+              className="rounded-full p-2 transition-transform cursor-pointer hover:scale-125"
             >
-              <Icon size={18} />
-              {STEP_META[s].label}
-            </div>
-          );
-        })}
-      </div>
+              <Heart
+                size={20}
+                className={state.favorites.includes(lesson.id) ? "fill-danger text-danger animate-pop" : "text-muted/60"}
+              />
+            </button>
+          </div>
 
-      <motion.div
-        key={step + quizIndex}
-        initial={{ x: 30 }}
-        animate={{ x: 0 }}
-        transition={{ duration: 0.25 }}
-      >
-          {/* ── История ── */}
-          {step === "story" && (
-            <Card className="overflow-hidden">
+          <div className="grid gap-6 lg:grid-cols-[360px_1fr] lg:items-start">
+            {/* ── Ляв панел: контекст (закача се на десктоп) ── */}
+            <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
               {/* Илюстрация на урока */}
               <div
-                className="relative flex h-44 items-center justify-center overflow-hidden"
+                className="relative flex h-52 items-center justify-center overflow-hidden rounded-2xl shadow-md"
                 style={{
                   background: `linear-gradient(135deg, ${world.color}, color-mix(in srgb, ${world.color} 60%, #0a1030))`,
                 }}
               >
                 <div className="dot-grid pointer-events-none absolute inset-0 opacity-40" />
-                <span className="pointer-events-none absolute left-6 top-6 opacity-40 animate-float-slow select-none">
+                <span className="pointer-events-none absolute left-5 top-5 opacity-40 animate-float-slow select-none">
                   <Thiing name={world.icon} size={44} />
                 </span>
-                <Sparkles className="pointer-events-none absolute right-8 bottom-5 text-white/50 animate-float" size={26} />
-                <span className="animate-float drop-shadow-lg select-none">
-                  <Thiing name={lesson.icon} size={110} />
+                <Sparkles className="pointer-events-none absolute bottom-4 right-6 text-white/50 animate-float" size={24} />
+                <span className="animate-float select-none drop-shadow-lg">
+                  <Thiing name={lesson.icon} size={128} />
                 </span>
               </div>
-              <CardContent className="pt-5">
-                <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-allianz/10 px-3 py-1 text-xs font-bold text-allianz">
-                  <BookOpen size={14} /> История
-                </div>
-                <p className="text-lg leading-relaxed text-fg/90">{lesson.story}</p>
-                <Button className="mt-6 w-full" size="lg" onClick={goNext}>
-                  Продължи
-                </Button>
-              </CardContent>
-            </Card>
-          )}
 
-          {/* ── Концепция (адаптирана към нивото по клас) ── */}
-          {step === "concept" && (() => {
-            const lvl = gradeLevelInfo(state.gradeLevel);
-            const adapted = lesson.levelConcepts?.[state.gradeLevel];
-            const concept = adapted ?? lesson.concept;
-            return (
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="mb-3 flex flex-wrap items-center gap-2">
-                    <span className="inline-flex items-center gap-2 rounded-full bg-warning/10 px-3 py-1 text-xs font-bold text-amber-700">
-                      <Lightbulb size={14} /> Ключова идея
-                    </span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-allianz/10 px-3 py-1 text-xs font-bold text-allianz">
-                      {lvl.label} · {lvl.grade}
-                    </span>
-                  </div>
-                  <h2 className="text-xl font-bold">{concept.title}</h2>
-                  <p className="mt-3 leading-relaxed text-fg/80">{concept.text}</p>
-                  {adapted && (
-                    <p className="mt-3 text-xs font-medium text-muted">
-                      Съдържанието е представено за твоето ниво ({lvl.math}). Смени нивото си от профила.
-                    </p>
-                  )}
-                  <Button className="mt-6 w-full" size="lg" onClick={goNext}>
-                    Разбрах, давай нататък!
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })()}
+              <div>
+                <div className="text-[11px] font-bold uppercase tracking-wide text-muted">{world.name}</div>
+                <h1 className="mt-0.5 text-lg font-extrabold leading-tight">{lesson.title}</h1>
+                <Progress className="mt-3" value={progressPct} />
+              </div>
 
-          {/* ── Интеракция ── */}
-          {step === "interaction" && (
-            <Card>
-              <CardContent className="pt-6">
-                <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-allianz/10 px-3 py-1 text-xs font-bold text-allianz">
-                  <Gamepad2 size={14} /> Твой ход
-                </div>
-                <h2 className="text-lg font-bold">{lesson.interaction.prompt}</h2>
-
-                {lesson.interaction.type === "slider" && (
-                  <div className="mt-6">
-                    <input
-                      type="range"
-                      min={lesson.interaction.min}
-                      max={lesson.interaction.max}
-                      step={lesson.interaction.step}
-                      value={sliderValue ?? lesson.interaction.min}
-                      onChange={(e) => {
-                        setSliderValue(Number(e.target.value));
-                        setSliderChecked(false);
-                      }}
-                      className="w-full accent-[#0057FF]"
-                    />
-                    <div className="mt-2 text-center text-2xl font-bold tabular-nums text-allianz">
-                      {sliderValue ?? lesson.interaction.min} {lesson.interaction.unit}
+              {/* Стъпки на урока */}
+              <div className="flex flex-col gap-1">
+                {STEPS.map((s, i) => {
+                  const Icon = STEP_META[s].icon;
+                  const activeStep = i === stepIndex;
+                  const doneStep = i < stepIndex;
+                  return (
+                    <div
+                      key={s}
+                      className={cn(
+                        "flex items-center gap-2.5 rounded-xl px-2 py-1.5 text-sm font-bold transition-colors",
+                        activeStep ? "bg-allianz/10 text-allianz" : doneStep ? "text-fg/70" : "text-muted/50"
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg",
+                          activeStep ? "bg-allianz text-white" : doneStep ? "bg-success/15 text-success" : "bg-soft text-muted/60"
+                        )}
+                      >
+                        {doneStep ? <Check size={13} strokeWidth={3} /> : <Icon size={13} />}
+                      </span>
+                      {STEP_META[s].label}
                     </div>
-                    {sliderChecked && sliderValue !== null && (
-                      <motion.p
-                        initial={{ y: 6 }}
-                        animate={{ y: 0 }}
-                        className="mt-4 rounded-xl bg-soft/60 p-4 text-sm font-medium text-fg/90"
-                      >
-                        {lesson.interaction.feedback(sliderValue)}
-                      </motion.p>
-                    )}
-                    <div className="mt-5 flex gap-3">
-                      <Button
-                        variant="outline"
-                        className="flex-1"
-                        onClick={() => setSliderChecked(true)}
-                        disabled={sliderValue === null}
-                      >
-                        Провери
-                      </Button>
-                      <Button className="flex-1" onClick={goNext} disabled={!sliderChecked}>
+                  );
+                })}
+              </div>
+            </aside>
+
+            {/* ── Дясна колона: активна стъпка върху мек панел ── */}
+            <motion.div
+              key={step + quizIndex}
+              initial={{ x: 20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.25 }}
+              className="flex flex-col justify-center rounded-2xl border border-line/70 bg-card/85 p-6 shadow-sm backdrop-blur-sm sm:p-8 lg:min-h-[520px]"
+            >
+              {/* ── История ── */}
+              {step === "story" && (
+                <>
+                  <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-allianz/10 px-3 py-1 text-xs font-bold text-allianz">
+                    <BookOpen size={14} /> История
+                  </div>
+                  <p className="text-lg leading-relaxed text-fg/90">{lesson.story}</p>
+                  <Button className="mt-6 w-full" size="lg" onClick={goNext}>
+                    Продължи
+                  </Button>
+                </>
+              )}
+
+              {/* ── Концепция (адаптирана към нивото по клас) ── */}
+              {step === "concept" && (() => {
+                const lvl = gradeLevelInfo(state.gradeLevel);
+                const adapted = lesson.levelConcepts?.[state.gradeLevel];
+                const concept = adapted ?? lesson.concept;
+                return (
+                  <>
+                    <div className="flex items-start gap-4">
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-3 flex flex-wrap items-center gap-2">
+                          <span className="inline-flex items-center gap-2 rounded-full bg-warning/10 px-3 py-1 text-xs font-bold text-amber-700">
+                            <Lightbulb size={14} /> Ключова идея
+                          </span>
+                          <span className="inline-flex items-center gap-1 rounded-full bg-allianz/10 px-3 py-1 text-xs font-bold text-allianz">
+                            {lvl.label} · {lvl.grade}
+                          </span>
+                        </div>
+                        <h2 className="text-xl font-bold">{concept.title}</h2>
+                        <p className="mt-3 leading-relaxed text-fg/80">{concept.text}</p>
+                        {adapted && (
+                          <p className="mt-3 text-xs font-medium text-muted">
+                            Съдържанието е представено за твоето ниво ({lvl.math}). Смени нивото си от профила.
+                          </p>
+                        )}
+                      </div>
+                      <Mascot pose="idea" size={104} className="-mt-2 hidden shrink-0 drop-shadow-sm lg:block" />
+                    </div>
+                    <Button className="mt-6 w-full" size="lg" onClick={goNext}>
+                      Разбрах, давай нататък!
+                    </Button>
+                  </>
+                );
+              })()}
+
+              {/* ── Интеракция ── */}
+              {step === "interaction" && (
+                <>
+                  <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-allianz/10 px-3 py-1 text-xs font-bold text-allianz">
+                    <Gamepad2 size={14} /> Твой ход
+                  </div>
+                  <h2 className="text-lg font-bold">{lesson.interaction.prompt}</h2>
+
+                  {lesson.interaction.type === "slider" && (
+                    <div className="mt-6">
+                      <input
+                        type="range"
+                        min={lesson.interaction.min}
+                        max={lesson.interaction.max}
+                        step={lesson.interaction.step}
+                        value={sliderValue ?? lesson.interaction.min}
+                        onChange={(e) => {
+                          setSliderValue(Number(e.target.value));
+                          setSliderChecked(false);
+                        }}
+                        className="w-full accent-[#0057FF]"
+                      />
+                      <div className="mt-2 text-center text-2xl font-bold tabular-nums text-allianz">
+                        {sliderValue ?? lesson.interaction.min} {lesson.interaction.unit}
+                      </div>
+                      {sliderChecked && sliderValue !== null && (
+                        <motion.p
+                          initial={{ y: 6 }}
+                          animate={{ y: 0 }}
+                          className="mt-4 rounded-xl bg-soft/60 p-4 text-sm font-medium text-fg/90"
+                        >
+                          {lesson.interaction.feedback(sliderValue)}
+                        </motion.p>
+                      )}
+                      <div className="mt-5 flex gap-3">
+                        <Button
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => setSliderChecked(true)}
+                          disabled={sliderValue === null}
+                        >
+                          Провери
+                        </Button>
+                        <Button className="flex-1" onClick={goNext} disabled={!sliderChecked}>
+                          Към куиза
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {lesson.interaction.type === "choice" && (
+                    <div className="mt-5 flex flex-col gap-3">
+                      {lesson.interaction.options.map((opt, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setChoicePicked(i)}
+                          className={cn(
+                            "rounded-xl border-2 p-4 text-left text-sm font-semibold transition-all cursor-pointer",
+                            choicePicked === null
+                              ? "border-line hover:border-allianz/50"
+                              : choicePicked === i
+                              ? opt.good
+                                ? "border-success bg-success/5"
+                                : "border-warning bg-warning/5"
+                              : "border-line/60 opacity-50"
+                          )}
+                        >
+                          {opt.label}
+                          {choicePicked === i && (
+                            <motion.p
+                              initial={{ scale: 0.95 }}
+                              animate={{ scale: 1 }}
+                              className="mt-2 text-xs font-medium text-fg/80"
+                            >
+                              {opt.feedback}
+                            </motion.p>
+                          )}
+                        </button>
+                      ))}
+                      <Button className="mt-2" size="lg" onClick={goNext} disabled={choicePicked === null}>
                         Към куиза
                       </Button>
                     </div>
-                  </div>
-                )}
+                  )}
+                </>
+              )}
 
-                {lesson.interaction.type === "choice" && (
+              {/* ── Куиз ── */}
+              {step === "quiz" && (
+                <>
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="inline-flex items-center gap-2 rounded-full bg-allianz/10 px-3 py-1 text-xs font-bold text-allianz">
+                      <HelpCircle size={14} /> Въпрос {quizIndex + 1} от {lesson.quiz.length}
+                    </div>
+                    <span className="text-xs font-semibold text-muted">Перфектен куиз = +50 XP бонус</span>
+                  </div>
+                  <h2 className="text-lg font-bold">{question.question}</h2>
                   <div className="mt-5 flex flex-col gap-3">
-                    {lesson.interaction.options.map((opt, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setChoicePicked(i)}
-                        className={cn(
-                          "rounded-xl border-2 p-4 text-left text-sm font-semibold transition-all cursor-pointer",
-                          choicePicked === null
-                            ? "border-line hover:border-allianz/50"
-                            : choicePicked === i
-                            ? opt.good
-                              ? "border-success bg-success/5"
-                              : "border-warning bg-warning/5"
-                            : "border-line/60 opacity-50"
-                        )}
+                    {question.options.map((opt, i) => {
+                      const answered = quizAnswer !== null;
+                      const isCorrect = i === question.correct;
+                      const isPicked = quizAnswer === i;
+                      const eliminated = wrongFirstTry === i && !answered; // скрит от Аликс след грешен първи опит
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => answerQuiz(i)}
+                          disabled={answered || eliminated}
+                          className={cn(
+                            "rounded-xl border-2 p-4 text-left text-sm font-semibold transition-all cursor-pointer disabled:cursor-default",
+                            !answered && !eliminated && "border-line hover:border-allianz/50",
+                            eliminated && "border-danger/40 bg-danger/5 opacity-40 line-through",
+                            answered && isCorrect && "border-success bg-success/5",
+                            answered && isPicked && !isCorrect && "border-danger bg-danger/5",
+                            answered && !isPicked && !isCorrect && "border-line/60 opacity-50"
+                          )}
+                        >
+                          {opt}
+                          {answered && isCorrect && <Check size={16} className="ml-2 inline text-success" strokeWidth={3} />}
+                          {answered && isPicked && !isCorrect && <X size={16} className="ml-2 inline text-danger" strokeWidth={3} />}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Подсказка от Аликс при активен втори опит */}
+                  {quizAnswer === null && wrongFirstTry !== null && (
+                    <div className="mt-4">
+                      <FiniBubble tone="warn">
+                        {finiLine} Задрасках грешния отговор — помисли кой от останалите пасва на урока.
+                      </FiniBubble>
+                    </div>
+                  )}
+
+                  {quizAnswer !== null && (
+                    <motion.div initial={{ y: 8 }} animate={{ y: 0 }} className="mt-4 flex flex-col gap-3">
+                      {quizAnswer === question.correct ? (
+                        <FiniBubble tone="success">
+                          {finiLine} {question.explanation}
+                        </FiniBubble>
+                      ) : wrongFirstTry === null ? (
+                        <FiniBubble tone="warn">{finiLine}</FiniBubble>
+                      ) : (
+                        <FiniBubble tone="info">
+                          {finiLine} Верният отговор е отбелязан в зелено — запомни: {question.explanation}
+                        </FiniBubble>
+                      )}
+
+                      {quizAnswer !== question.correct && wrongFirstTry === null ? (
+                        <Button className="w-full" size="lg" onClick={retryQuestion}>
+                          Опитай пак с подсказка
+                        </Button>
+                      ) : (
+                        <Button className="w-full" size="lg" onClick={goNext}>
+                          {quizIndex < lesson.quiz.length - 1 ? "Следващ въпрос" : "Виж наградата"}
+                        </Button>
+                      )}
+                    </motion.div>
+                  )}
+                </>
+              )}
+
+              {/* ── Награда ── */}
+              {step === "reward" && result && (
+                <div className="text-center">
+                  <motion.div
+                    initial={{ scale: 0.3 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 12 }}
+                    className="flex justify-center"
+                  >
+                    <Mascot
+                      pose={result.score === 100 ? "trophy" : result.score >= 50 ? "thumb" : "point"}
+                      size={140}
+                      className="drop-shadow-md"
+                    />
+                  </motion.div>
+                  <h2 className="mt-4 text-2xl font-bold">
+                    {result.score === 100 ? "Перфектно!" : result.score >= 50 ? "Браво!" : "Добър опит!"}
+                  </h2>
+                  <p className="mt-1 text-muted">
+                    Резултат от куиза: <span className="font-bold tabular-nums">{result.score}%</span>
+                  </p>
+
+                  <motion.div
+                    initial={{ y: 10 }}
+                    animate={{ y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full bg-allianz/10 px-5 py-2.5 text-lg font-bold text-allianz tabular-nums"
+                  >
+                    <Star size={18} fill="currentColor" /> +{result.xp} XP
+                  </motion.div>
+
+                  {/* Финансов IQ след урока */}
+                  {(() => {
+                    const iqNow = iqFromState(state);
+                    const delta = iqNow - result.iqBefore;
+                    return (
+                      <motion.div
+                        initial={{ y: 10 }}
+                        animate={{ y: 0 }}
+                        transition={{ delay: 0.45 }}
+                        className="mx-auto mt-3 flex max-w-sm items-center gap-3 rounded-2xl border border-line bg-soft/50 p-4 text-left"
                       >
-                        {opt.label}
-                        {choicePicked === i && (
-                          <motion.p
-                            initial={{ scale: 0.95 }}
-                            animate={{ scale: 1 }}
-                            className="mt-2 text-xs font-medium text-fg/80"
-                          >
-                            {opt.feedback}
-                          </motion.p>
-                        )}
-                      </button>
-                    ))}
-                    <Button className="mt-2" size="lg" onClick={goNext} disabled={choicePicked === null}>
-                      Към куиза
+                        <Thiing name="brain" size={44} />
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-bold uppercase tracking-wide text-muted">Финансов IQ</div>
+                          <div className="text-xl font-extrabold tabular-nums">
+                            {iqNow} <span className="text-sm font-bold text-muted">/ 1000</span>
+                            {delta > 0 && <span className="ml-2 text-sm font-extrabold text-success">+{delta}</span>}
+                          </div>
+                          <div className="text-xs font-bold text-allianz">{iqTitle(iqNow)}</div>
+                        </div>
+                      </motion.div>
+                    );
+                  })()}
+
+                  {result.leveledUp && (
+                    <motion.p
+                      initial={{ scale: 0.8 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="mt-4 rounded-xl bg-warning/10 p-3 font-bold text-amber-700"
+                    >
+                      <Rocket size={16} className="mr-1 inline" /> НОВО НИВО! Вече си ниво {levelFromXp(state.xp)}!
+                    </motion.p>
+                  )}
+
+                  {result.newBadge && (
+                    <motion.div
+                      initial={{ scale: 0.8 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.7 }}
+                      className="mt-4 rounded-xl bg-success/10 p-3"
+                    >
+                      <span className="flex justify-center"><Thiing name={BADGES.find((b) => b.id === result.newBadge)?.icon ?? "trophy"} size={44} /></span>
+                      <p className="font-bold text-green-700">
+                        Нова значка: {BADGES.find((b) => b.id === result.newBadge)?.name}!
+                      </p>
+                    </motion.div>
+                  )}
+
+                  <div className="mt-7 flex gap-3">
+                    <Button variant="outline" className="flex-1" onClick={() => router.push("/learn")}>
+                      Към картата
+                    </Button>
+                    <Button className="flex-1" onClick={() => router.push("/")}>
+                      Начало
                     </Button>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
-
-          {/* ── Куиз ── */}
-          {step === "quiz" && (
-            <Card>
-              <CardContent className="pt-6">
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-allianz/10 px-3 py-1 text-xs font-bold text-allianz">
-                    <HelpCircle size={14} /> Въпрос {quizIndex + 1} от {lesson.quiz.length}
-                  </div>
-                  <span className="text-xs font-semibold text-muted">Перфектен куиз = +50 XP бонус</span>
                 </div>
-                <h2 className="text-lg font-bold">{question.question}</h2>
-                <div className="mt-5 flex flex-col gap-3">
-                  {question.options.map((opt, i) => {
-                    const answered = quizAnswer !== null;
-                    const isCorrect = i === question.correct;
-                    const isPicked = quizAnswer === i;
-                    const eliminated = wrongFirstTry === i && !answered; // скрит от Аликс след грешен първи опит
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => answerQuiz(i)}
-                        disabled={answered || eliminated}
-                        className={cn(
-                          "rounded-xl border-2 p-4 text-left text-sm font-semibold transition-all cursor-pointer disabled:cursor-default",
-                          !answered && !eliminated && "border-line hover:border-allianz/50",
-                          eliminated && "border-danger/40 bg-danger/5 opacity-40 line-through",
-                          answered && isCorrect && "border-success bg-success/5",
-                          answered && isPicked && !isCorrect && "border-danger bg-danger/5",
-                          answered && !isPicked && !isCorrect && "border-line/60 opacity-50"
-                        )}
-                      >
-                        {opt}
-                        {answered && isCorrect && <Check size={16} className="ml-2 inline text-success" strokeWidth={3} />}
-                        {answered && isPicked && !isCorrect && <X size={16} className="ml-2 inline text-danger" strokeWidth={3} />}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Подсказка от Аликс при активен втори опит */}
-                {quizAnswer === null && wrongFirstTry !== null && (
-                  <div className="mt-4">
-                    <FiniBubble tone="warn">
-                      {finiLine} Задрасках грешния отговор — помисли кой от останалите пасва на урока.
-                    </FiniBubble>
-                  </div>
-                )}
-
-                {quizAnswer !== null && (
-                  <motion.div initial={{ y: 8 }} animate={{ y: 0 }} className="mt-4 flex flex-col gap-3">
-                    {quizAnswer === question.correct ? (
-                      <FiniBubble tone="success">
-                        {finiLine} {question.explanation}
-                      </FiniBubble>
-                    ) : wrongFirstTry === null ? (
-                      <FiniBubble tone="warn">{finiLine}</FiniBubble>
-                    ) : (
-                      <FiniBubble tone="info">
-                        {finiLine} Верният отговор е отбелязан в зелено — запомни: {question.explanation}
-                      </FiniBubble>
-                    )}
-
-                    {quizAnswer !== question.correct && wrongFirstTry === null ? (
-                      <Button className="w-full" size="lg" onClick={retryQuestion}>
-                        Опитай пак с подсказка
-                      </Button>
-                    ) : (
-                      <Button className="w-full" size="lg" onClick={goNext}>
-                        {quizIndex < lesson.quiz.length - 1 ? "Следващ въпрос" : "Виж наградата"}
-                      </Button>
-                    )}
-                  </motion.div>
-                )}
-              </CardContent>
-            </Card>
-          )}
-
-          {/* ── Награда ── */}
-          {step === "reward" && result && (
-            <Card className="overflow-hidden">
-              <CardContent className="pt-8 text-center">
-                <motion.div
-                  initial={{ scale: 0.3 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 200, damping: 12 }}
-                  className="flex justify-center"
-                >
-                  <Thiing name={result.score === 100 ? "trophy" : result.score >= 50 ? "confetti" : "dumbbell"} size={96} />
-                </motion.div>
-                <h2 className="mt-4 text-2xl font-bold">
-                  {result.score === 100 ? "Перфектно!" : result.score >= 50 ? "Браво!" : "Добър опит!"}
-                </h2>
-                <p className="mt-1 text-muted">
-                  Резултат от куиза: <span className="font-bold tabular-nums">{result.score}%</span>
-                </p>
-
-                <motion.div
-                  initial={{ y: 10 }}
-                  animate={{ y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full bg-allianz/10 px-5 py-2.5 text-lg font-bold text-allianz tabular-nums"
-                >
-                  <Star size={18} fill="currentColor" /> +{result.xp} XP
-                </motion.div>
-
-                {/* Финансов IQ след урока */}
-                {(() => {
-                  const iqNow = iqFromState(state);
-                  const delta = iqNow - result.iqBefore;
-                  return (
-                    <motion.div
-                      initial={{ y: 10 }}
-                      animate={{ y: 0 }}
-                      transition={{ delay: 0.45 }}
-                      className="mx-auto mt-3 flex max-w-sm items-center gap-3 rounded-2xl border border-line bg-soft/50 p-4 text-left"
-                    >
-                      <Thiing name="brain" size={44} />
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs font-bold uppercase tracking-wide text-muted">Финансов IQ</div>
-                        <div className="text-xl font-extrabold tabular-nums">
-                          {iqNow} <span className="text-sm font-bold text-muted">/ 1000</span>
-                          {delta > 0 && <span className="ml-2 text-sm font-extrabold text-success">+{delta}</span>}
-                        </div>
-                        <div className="text-xs font-bold text-allianz">{iqTitle(iqNow)}</div>
-                      </div>
-                    </motion.div>
-                  );
-                })()}
-
-                {result.leveledUp && (
-                  <motion.p
-                    initial={{ scale: 0.8 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="mt-4 rounded-xl bg-warning/10 p-3 font-bold text-amber-700"
-                  >
-                    <Rocket size={16} className="mr-1 inline" /> НОВО НИВО! Вече си ниво {levelFromXp(state.xp)}!
-                  </motion.p>
-                )}
-
-                {result.newBadge && (
-                  <motion.div
-                    initial={{ scale: 0.8 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.7 }}
-                    className="mt-4 rounded-xl bg-success/10 p-3"
-                  >
-                    <span className="flex justify-center"><Thiing name={BADGES.find((b) => b.id === result.newBadge)?.icon ?? "trophy"} size={44} /></span>
-                    <p className="font-bold text-green-700">
-                      Нова значка: {BADGES.find((b) => b.id === result.newBadge)?.name}!
-                    </p>
-                  </motion.div>
-                )}
-
-                <div className="mt-7 flex gap-3">
-                  <Button variant="outline" className="flex-1" onClick={() => router.push("/learn")}>
-                    Към картата
-                  </Button>
-                  <Button className="flex-1" onClick={() => router.push("/")}>
-                    Начало
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-      </motion.div>
+              )}
+            </motion.div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

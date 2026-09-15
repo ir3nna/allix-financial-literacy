@@ -5,7 +5,7 @@
 // обяснение и пример вдясно, всичко видимо без разгъване.
 
 import { useMemo, useState } from "react";
-import { Search, Quote } from "lucide-react";
+import { Search, Quote, BookMarked } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { GLOSSARY, GLOSSARY_CATEGORIES } from "@/lib/glossary";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,9 @@ export default function GlossaryPage() {
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <h1 className="text-2xl font-extrabold md:text-3xl">Речник</h1>
+        <h1 className="flex items-center gap-2 text-2xl font-extrabold md:text-3xl">
+          <BookMarked size={26} className="text-allianz" /> Речник
+        </h1>
         <p className="text-sm font-medium text-muted">
           {GLOSSARY.length} термина, обяснени на човешки език — с пример от живота
         </p>

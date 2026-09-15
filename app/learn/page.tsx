@@ -6,8 +6,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Lock, CheckCircle2, Clock } from "lucide-react";
+import { Lock, CheckCircle2, Clock, Map } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Thiing } from "@/components/thiing";
 import { useGame } from "@/lib/game-state";
 import { WORLDS, LESSONS, GRADE_LEVELS, gradeLevelInfo, worldTierLabel, type World } from "@/lib/data";
@@ -44,7 +45,9 @@ export default function LearnPage() {
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <h1 className="text-2xl font-extrabold md:text-3xl">Уроци</h1>
+        <h1 className="flex items-center gap-2 text-2xl font-extrabold md:text-3xl">
+          <Map size={26} className="text-allianz" /> Уроци
+        </h1>
         <p className="text-sm font-medium text-muted">Всяка завършена тема ви носи нови знания и награди</p>
       </div>
 
@@ -98,9 +101,9 @@ export default function LearnPage() {
                   unlocked ? "hover:-translate-y-1 hover:shadow-xl cursor-pointer" : "opacity-65 grayscale-[50%]"
                 )}
               >
-                {/* Илюстрация на света */}
+                {/* Илюстрация на света — по-нисък кадър, за да покрива изцяло */}
                 <div
-                  className="relative aspect-[4/3] shrink-0 overflow-hidden"
+                  className="relative aspect-[3/2] shrink-0 overflow-hidden"
                   style={{ backgroundColor: `${world.color}14` }}
                 >
                   <WorldImage world={world} />
@@ -130,8 +133,21 @@ export default function LearnPage() {
                   <h2 className="text-lg font-extrabold leading-tight">{world.name}</h2>
                   <p className="text-sm text-fg/75">{world.description}</p>
 
-                  {/* Таги — долепени долу */}
-                  <div className="mt-auto flex flex-wrap gap-2 pt-1">
+                  {/* Напредък по модула */}
+                  <div className="mt-auto pt-1">
+                    <div className="mb-1 flex items-center justify-between text-xs font-semibold text-muted">
+                      <span>Напредък</span>
+                      <span className="tabular-nums">{done} / {lessons.length}</span>
+                    </div>
+                    <Progress
+                      value={lessons.length ? (done / lessons.length) * 100 : 0}
+                      className="h-2"
+                      barClassName={completed ? "bg-success" : undefined}
+                    />
+                  </div>
+
+                  {/* Таги */}
+                  <div className="flex flex-wrap gap-2 pt-1">
                     <span className="inline-flex items-center gap-1 rounded-full bg-soft px-3 py-1.5 text-xs font-semibold text-muted">
                       <Clock size={14} /> {totalMin} мин
                     </span>

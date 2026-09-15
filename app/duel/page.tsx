@@ -135,7 +135,9 @@ export default function DuelPage() {
       <div className="flex flex-col gap-5">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-extrabold md:text-3xl">Дуели</h1>
+            <h1 className="flex items-center gap-2 text-2xl font-extrabold md:text-3xl">
+              <Swords size={26} className="text-allianz" /> Дуели
+            </h1>
             <p className="text-sm font-medium text-muted">
               Куиз битка 1 срещу 1 — {QUESTION_COUNT} въпроса, {SECONDS_PER_QUESTION} сек. на въпрос
             </p>
@@ -256,7 +258,7 @@ export default function DuelPage() {
   // ─── Битка ───
   if (phase === "battle" && question && opponent) {
     return (
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
+      <div className="flex w-full flex-col gap-4">
         {/* Резултат на живо */}
         <Card>
           <CardContent className="flex items-center justify-between pt-4 pb-4">
@@ -305,7 +307,7 @@ export default function DuelPage() {
         <Card>
           <CardContent className="pt-6">
             <h2 className="text-lg font-bold">{question.question}</h2>
-            <div className="mt-5 flex flex-col gap-3">
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {question.options.map((opt, i) => {
                 const isCorrect = i === question.correct;
                 const isPicked = answer === i;

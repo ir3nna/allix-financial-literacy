@@ -32,39 +32,49 @@ export default function WorldPage({ params }: { params: Promise<{ worldId: strin
   const totalMin = lessons.reduce((s, l) => s + (parseInt(l.duration) || 0), 0);
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
+    <div className="flex w-full flex-col gap-5">
       {/* Назад */}
       <Link href="/learn" className="inline-flex w-fit items-center gap-1 text-sm font-bold text-muted transition-colors hover:text-fg">
         <ArrowLeft size={16} /> Всички уроци
       </Link>
 
-      {/* Хедър на модула */}
+      {/* Хедър на модула — текст вляво, илюстрация вдясно (показана изцяло, без отрязване) */}
       <Card className="overflow-hidden">
-        <div className="relative h-40 overflow-hidden md:h-48" style={{ backgroundColor: `${world.color}14` }}>
-          {world.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={world.image} alt={world.name} className="h-full w-full object-cover" draggable={false} />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center">
-              <Thiing name={world.icon} size={120} />
+        <div
+          className="grid items-center gap-2 md:grid-cols-[1fr_340px]"
+          style={{ background: `linear-gradient(115deg, ${world.color}18, transparent 68%)` }}
+        >
+          <CardContent className="order-2 pt-4 md:order-1 md:py-8">
+            <span className="inline-flex rounded-full bg-white/85 px-2.5 py-1 text-[11px] font-bold text-fg shadow-sm dark:bg-white/10 dark:text-white">
+              {worldTierLabel(world.requiredLevel)}
+            </span>
+            <h1 className="mt-2 text-xl font-extrabold md:text-2xl">{world.name}</h1>
+            <p className="mt-1 text-sm text-fg/75">{world.description}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="inline-flex items-center gap-1 rounded-full bg-soft px-3 py-1.5 text-xs font-semibold text-muted">
+                <Clock size={14} /> {totalMin} мин
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-allianz/10 px-3 py-1.5 text-xs font-semibold text-allianz">
+                {done} / {lessons.length} урока
+              </span>
             </div>
-          )}
-          <span className="absolute right-3 top-3 inline-flex rounded-full bg-white/85 px-2.5 py-1 text-[11px] font-bold text-fg shadow-sm backdrop-blur">
-            {worldTierLabel(world.requiredLevel)}
-          </span>
-        </div>
-        <CardContent className="pt-4">
-          <h1 className="text-xl font-extrabold md:text-2xl">{world.name}</h1>
-          <p className="mt-1 text-sm text-fg/75">{world.description}</p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full bg-soft px-3 py-1.5 text-xs font-semibold text-muted">
-              <Clock size={14} /> {totalMin} мин
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-allianz/10 px-3 py-1.5 text-xs font-semibold text-allianz">
-              {done} / {lessons.length} урока
-            </span>
+          </CardContent>
+
+          {/* Илюстрация — вдясно, изцяло видима */}
+          <div className="order-1 flex items-center justify-center p-4 md:order-2 md:p-6">
+            {world.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={world.image}
+                alt={world.name}
+                className="max-h-40 w-auto object-contain drop-shadow-md md:max-h-52"
+                draggable={false}
+              />
+            ) : (
+              <Thiing name={world.icon} size={120} />
+            )}
           </div>
-        </CardContent>
+        </div>
       </Card>
 
       {/* Заключен модул */}
@@ -81,6 +91,7 @@ export default function WorldPage({ params }: { params: Promise<{ worldId: strin
           <div className="px-1 text-[11px] font-extrabold uppercase tracking-wider text-muted/70">
             Уроци в модула
           </div>
+          <div className="grid gap-2.5 sm:grid-cols-2">
           {lessons.map((lesson, i) => {
             const p = state.progress[lesson.id];
             const isDone = !!p;
@@ -115,6 +126,7 @@ export default function WorldPage({ params }: { params: Promise<{ worldId: strin
               </motion.div>
             );
           })}
+          </div>
         </div>
       )}
     </div>

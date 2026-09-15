@@ -90,6 +90,24 @@
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
   --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* По-едра типография за цялата платформа — текстът вече не дребнее.
+     Само размерите на шрифта растат; отстоянията (padding/margin) остават,
+     така че съдържанието изпълва по-плътно пространството без повече „въздух". */
+  --text-xs: 0.8125rem;      /* 13px */
+  --text-xs--line-height: 1.15rem;
+  --text-sm: 0.9375rem;      /* 15px */
+  --text-sm--line-height: 1.4rem;
+  --text-base: 1.0625rem;    /* 17px */
+  --text-base--line-height: 1.65rem;
+  --text-lg: 1.1875rem;      /* 19px */
+  --text-lg--line-height: 1.8rem;
+  --text-xl: 1.375rem;       /* 22px */
+  --text-xl--line-height: 1.9rem;
+  --text-2xl: 1.625rem;      /* 26px */
+  --text-2xl--line-height: 2.1rem;
+  --text-3xl: 2.0625rem;     /* 33px */
+  --text-3xl--line-height: 2.45rem;
 }
 
 html {

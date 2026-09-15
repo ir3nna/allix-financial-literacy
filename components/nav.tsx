@@ -29,6 +29,12 @@ const ITEMS = [
   { href: "/profile", label: "Профил", icon: User },
 ];
 
+// Подстраници, които принадлежат на секция, но живеят на друг път —
+// табът остава маркиран като „отворен". Напр. отворен урок → активно „Уроци".
+const SECTION_ALIASES: Record<string, string[]> = {
+  "/learn": ["/lesson"],
+};
+
 // Изскачащ надпис при свит сайдбар — показва името на страницата до иконката
 function Tip({ label }: { label: string }) {
   return (
@@ -44,11 +50,13 @@ function Tip({ label }: { label: string }) {
 export function Nav() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { state, updateSettings } = useGame();
+  const { state, updateSettings, ready } = useGame();
 
   const portal = portalForPath(pathname);
   const activeTab = searchParams.get("tab") ?? portal?.tabs[0].key;
-  const collapsed = state.sidebarCollapsed;
+  // До зареждане на състоянието от localStorage сайдбарът е разгънат (както при SSR),
+  // за да не се получи разминаване при хидратацията.
+  const collapsed = ready ? state.sidebarCollapsed : false;
 
   // Ширината на сайдбара се чете и от <main> в layout.tsx
   useEffect(() => {
@@ -66,24 +74,39 @@ export function Nav() {
     return () => mq.removeEventListener("change", update);
   }, [state.theme]);
 
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    if (pathname.startsWith(href)) return true;
+    return (SECTION_ALIASES[href] ?? []).some((p) => pathname.startsWith(p));
+  };
 
   const asideClass = cn(
-    "fixed inset-y-0 left-0 z-40 hidden w-[var(--sidebar-w)] flex-col border-r border-line bg-card transition-[width,padding] duration-300 ease-out md:flex",
-    collapsed ? "p-2" : "p-4"
+    // Вертикалният падинг е еднакъв в двете състояния (py-4), за да НЕ мърдат табовете
+    // нагоре/надолу при свиване; сменя се само хоризонталният.
+    "fixed inset-y-0 left-0 z-40 hidden w-[var(--sidebar-w)] flex-col border-r border-line bg-card py-4 transition-[width,padding] duration-300 ease-out md:flex",
+    collapsed ? "px-2" : "px-4"
   );
 
   const sidebarHeader = (
-    <div className={cn("mb-6 flex", collapsed ? "justify-center pt-1" : "items-center pl-2 pt-1")}>
-      <Link href="/" className="block">
-        {collapsed ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src="/allix-mark.png" alt="Allix" className="h-11 w-auto" draggable={false} />
-        ) : (
-          <Logo />
-        )}
-      </Link>
+    // Хедърът пази еднаква височина в двете състояния, за да не подскачат табовете
+    <div className="mb-3">
+      <div className={cn("flex h-[67px] items-center", collapsed ? "justify-center" : "pl-2")}>
+        <Link href="/" className="block">
+          {collapsed ? (
+            <>
+              {/* Свит знак: син в светла тема, бял в тъмна */}
+              {/* eslint-disable @next/next/no-img-element */}
+              <img src="/allix-mark.png" alt="Allix" className="h-10 w-auto dark:hidden" draggable={false} />
+              <img src="/allix-mark-white.png" alt="Allix" className="hidden h-10 w-auto dark:block" draggable={false} />
+              {/* eslint-enable @next/next/no-img-element */}
+            </>
+          ) : (
+            <Logo />
+          )}
+        </Link>
+      </div>
+      {/* Разделител под логото — с ширината на целия хедър (до ръбовете на сайдбара) */}
+      <div className={cn("border-b border-line", collapsed ? "-mx-2" : "-mx-4")} />
     </div>
   );
 
@@ -135,8 +158,10 @@ export function Nav() {
 
   const portalLinks = (
     <div className="mt-auto mb-3">
+      {/* Разделител над секция „Портали" */}
+      <div className={cn("mb-3 border-t border-line", collapsed ? "-mx-2" : "-mx-4")} />
       {!collapsed && (
-        <div className="px-4 pb-1 text-[10px] font-extrabold uppercase tracking-wider text-muted/70">
+        <div className="px-4 pb-1 text-[11px] font-extrabold uppercase tracking-wider text-muted/70">
           Портали
         </div>
       )}
@@ -146,12 +171,12 @@ export function Nav() {
             key={href}
             href={href}
             className={cn(
-              "group/nav relative flex items-center rounded-xl text-xs font-bold transition-colors",
-              collapsed ? "justify-center py-2.5" : "gap-2.5 px-4 py-2",
+              "group/nav relative flex items-center rounded-xl text-sm font-bold transition-colors",
+              collapsed ? "justify-center py-2.5" : "gap-2.5 px-4 py-2.5",
               isActive(href) ? "bg-allianz/10 text-allianz" : "text-muted hover:bg-soft hover:text-fg"
             )}
           >
-            <Icon size={16} className="text-allianz" />
+            <Icon size={18} className="text-allianz" />
             {collapsed ? <Tip label={label} /> : label}
           </Link>
         ))}
@@ -227,14 +252,14 @@ export function Nav() {
                 key={href}
                 href={href}
                 className={cn(
-                  "group/nav relative flex items-center rounded-2xl text-sm font-bold transition-all",
+                  "group/nav relative flex items-center rounded-2xl text-base font-bold transition-all",
                   collapsed ? "justify-center py-3" : "gap-3 px-4 py-3",
                   active
                     ? "bg-allianz text-white shadow-lg shadow-allianz/30"
                     : "text-fg hover:bg-soft"
                 )}
               >
-                <Icon size={22} strokeWidth={active ? 2.5 : 2} className={active ? "text-blue-200" : "text-allianz/60"} />
+                <Icon size={23} strokeWidth={active ? 2.5 : 2} className={active ? "text-blue-200" : "text-allianz/60"} />
                 {collapsed ? <Tip label={label} /> : label}
               </Link>
             );
