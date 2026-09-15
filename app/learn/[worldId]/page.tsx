@@ -41,7 +41,7 @@ export default function WorldPage({ params }: { params: Promise<{ worldId: strin
       {/* Хедър на модула — текст вляво, илюстрация вдясно (показана изцяло, без отрязване) */}
       <Card className="overflow-hidden">
         <div
-          className="grid items-center gap-2 md:grid-cols-[1fr_340px]"
+          className="grid items-stretch md:grid-cols-[1fr_340px]"
           style={{ background: `linear-gradient(115deg, ${world.color}18, transparent 68%)` }}
         >
           <CardContent className="order-2 pt-4 md:order-1 md:py-8">
@@ -60,18 +60,20 @@ export default function WorldPage({ params }: { params: Promise<{ worldId: strin
             </div>
           </CardContent>
 
-          {/* Илюстрация — вдясно, изцяло видима */}
-          <div className="order-1 flex items-center justify-center p-4 md:order-2 md:p-6">
+          {/* Илюстрация — вдясно, опира до горе/дясно/долу на картата (без бяла рамка) */}
+          <div className="relative order-1 min-h-[180px] overflow-hidden md:order-2 md:min-h-full">
             {world.image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={world.image}
                 alt={world.name}
-                className="max-h-40 w-auto object-contain drop-shadow-md md:max-h-52"
+                className="absolute inset-0 h-full w-full object-cover"
                 draggable={false}
               />
             ) : (
-              <Thiing name={world.icon} size={120} />
+              <div className="flex h-full w-full items-center justify-center">
+                <Thiing name={world.icon} size={120} />
+              </div>
             )}
           </div>
         </div>
