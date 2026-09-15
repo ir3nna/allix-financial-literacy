@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export function Logo({ size = "md", className }: { size?: "sm" | "md"; className?: string }) {
   const width = size === "sm" ? "w-20" : "w-28";
   return (
-    <span className={cn("inline-block", className)}>
+    <span className={cn("inline-block select-none", className)}>
       {/* eslint-disable @next/next/no-img-element */}
       <img
         src="/allix-blue.png"

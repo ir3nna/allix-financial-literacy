@@ -251,6 +251,77 @@ export default function DuelPage() {
             ))}
           </CardContent>
         </Card>
+
+        {/* Твоят рекорд */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Trophy size={18} className="text-allianz" /> Твоят рекорд
+            </CardTitle>
+            <p className="text-sm font-medium text-muted">
+              Всеки дуел трупа XP — дори загубата носи точки за смелост.
+            </p>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              { label: "Победи", value: String(state.duelsWon), tone: "text-success" },
+              { label: "Изиграни", value: String(state.duelsPlayed) },
+              {
+                label: "Успеваемост",
+                value: state.duelsPlayed ? `${Math.round((state.duelsWon / state.duelsPlayed) * 100)}%` : "—",
+              },
+              { label: "XP при победа", value: `+${recommended.winXp}`, tone: "text-allianz" },
+            ].map((s) => (
+              <div key={s.label} className="rounded-2xl border border-line/60 bg-soft/40 p-4 text-center">
+                <div className={cn("text-2xl font-extrabold tabular-nums", s.tone)}>{s.value}</div>
+                <div className="mt-0.5 text-xs font-semibold text-muted">{s.label}</div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Как протича дуелът */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Swords size={18} className="text-allianz" /> Как протича дуелът
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-3">
+            {[
+              { icon: Sparkles, title: `${QUESTION_COUNT} въпроса`, text: "Един и същ куиз за теб и опонента — печели повече верни отговори." },
+              { icon: Timer, title: `${SECONDS_PER_QUESTION} секунди`, text: "Толкова имаш на въпрос. Бързай, но не прибързвай — точността е ключът." },
+              { icon: Trophy, title: "Повече верни печели", text: "Победа = пълно XP, равен = половин, загуба = XP за участие. Всичко брои." },
+            ].map((s) => (
+              <div key={s.title} className="flex gap-3 rounded-2xl border border-line/60 bg-soft/40 p-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-allianz/10 text-allianz">
+                  <s.icon size={20} />
+                </span>
+                <div className="min-w-0">
+                  <div className="text-sm font-extrabold">{s.title}</div>
+                  <p className="mt-0.5 text-xs font-medium leading-relaxed text-muted">{s.text}</p>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Съвети от Аликс */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles size={18} className="text-allianz" /> Съвети от Аликс
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <FiniBubble>
+              Чети внимателно, но бързо — таймерът тече. По-добре верен отговор на 12-та секунда, отколкото прибързан на 3-та.
+            </FiniBubble>
+            <FiniBubble tone="success">
+              Загубиш ли — пак взимаш XP. Играй смело: всеки дуел те прави по-добър и качва класа ти нагоре.
+            </FiniBubble>
+          </CardContent>
+        </Card>
       </div>
     );
   }

@@ -91,7 +91,7 @@ export function Nav() {
     // Хедърът пази еднаква височина в двете състояния, за да не подскачат табовете
     <div className="mb-3">
       <div className={cn("flex h-[67px] items-center", collapsed ? "justify-center" : "pl-2")}>
-        <Link href="/" className="block">
+        <Link href="/" className="block select-none">
           {collapsed ? (
             <>
               {/* Свит знак: син в светла тема, бял в тъмна */}
