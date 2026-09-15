@@ -130,8 +130,9 @@ export function FiniWidget() {
           >
             {/* Заглавие */}
             <div className="flex items-center gap-3 bg-gradient-to-r from-allianz to-allianz-dark p-4 text-white">
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 p-1">
-                <Mascot size={36} />
+              <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full ring-2 ring-white/40">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/aliks-avatar.png" alt="Аликс" className="h-full w-full object-cover" draggable={false} />
               </div>
               <div>
                 <div className="font-extrabold leading-tight">{FINI.name}</div>
@@ -143,8 +144,7 @@ export function FiniWidget() {
             <div ref={listRef} className="flex min-h-40 flex-1 flex-col gap-3 overflow-y-auto p-4">
               {messages.map((msg, i) =>
                 msg.from === "fini" ? (
-                  <div key={i} className="flex items-start gap-2">
-                    <span className="mt-1 shrink-0"><Mascot size={22} /></span>
+                  <div key={i} className="flex">
                     <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-soft p-3 text-sm font-medium leading-relaxed">
                       {msg.text}
                     </div>
@@ -159,7 +159,7 @@ export function FiniWidget() {
               )}
               {typing && (
                 <div className="flex items-center gap-2 text-sm font-semibold text-muted">
-                  <Mascot size={20} /> Аликс пише…
+                  Аликс пише…
                 </div>
               )}
             </div>
