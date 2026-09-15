@@ -4,10 +4,11 @@
 // (интерактивни реални задачи) и автоматично проследявани дневни/седмични мисии.
 
 import { useState, type ReactNode } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   CheckCircle2, ChevronLeft, Zap, Plus, Trash2, Minus,
-  ArrowRight, Sparkles, Target,
+  ArrowRight, Sparkles, Target, CalendarDays,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -523,6 +524,11 @@ export default function MissionsPage() {
     return entries.filter(([, p]) => p.perfect && p.completedAt >= weekAgo).length;
   };
 
+  // Седмично предизвикателство — водещата седмична мисия (напредък се проследява автоматично)
+  const weekly = MISSIONS.find((m) => m.type === "weekly" && m.metric === "lessons") ?? MISSIONS.find((m) => m.type === "weekly");
+  const weeklyDone = weekly ? Math.min(progressFor(weekly), weekly.target) : 0;
+  const weeklyDoneComplete = weekly ? weeklyDone >= weekly.target : false;
+
   return (
     <div className="flex flex-col gap-5">
       <div>
@@ -532,59 +538,90 @@ export default function MissionsPage() {
         <p className="text-sm font-medium text-muted">Изпълнявай предизвикателства, трупай XP</p>
       </div>
 
-      {/* Дневно предизвикателство */}
-      <button
-        onClick={() => !dailyDone && setView("daily")}
-        disabled={dailyDone}
-        className={cn("text-left", !dailyDone && "cursor-pointer transition-transform hover:scale-[1.01]")}
-      >
-        <div className="relative">
-        <Card className={cn(
-          "overflow-hidden text-white",
-          dailyDone
-            ? "bg-gradient-to-br from-success to-green-700"
-            : "border-allianz/30 bg-gradient-to-br from-allianz to-allianz-dark"
-        )}>
-          <CardContent className="relative pt-5 pb-5 sm:pr-44 md:pr-56">
-            <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
-            <div className="relative">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-white/70">
-                <Zap size={14} /> Дневно предизвикателство
+      {/* Дневно + Седмично предизвикателство — две карти с маскота между тях */}
+      <div className="grid items-stretch gap-3 sm:grid-cols-[1fr_auto_1fr]">
+        {/* Дневно */}
+        <button
+          onClick={() => !dailyDone && setView("daily")}
+          disabled={dailyDone}
+          className={cn("text-left", !dailyDone && "cursor-pointer transition-transform hover:scale-[1.01]")}
+        >
+          <Card className={cn(
+            "h-full overflow-hidden text-white",
+            dailyDone
+              ? "bg-gradient-to-br from-success to-green-700"
+              : "border-allianz/30 bg-gradient-to-br from-allianz to-allianz-dark"
+          )}>
+            <CardContent className="relative pt-5 pb-5">
+              <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
+              <div className="relative">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-white/70">
+                  <Zap size={14} /> Дневно предизвикателство
+                </div>
+                {dailyDone ? (
+                  <>
+                    <div className="mt-1.5 flex items-center gap-2 text-lg font-extrabold">
+                      <CheckCircle2 size={20} /> {state.dailyChallenge?.correct ? "Позна днешния въпрос!" : "Опитът е използван"}
+                    </div>
+                    <p className="mt-1 text-sm font-medium text-white/80">Утре нов въпрос и нов бонус.</p>
+                  </>
+                ) : (
+                  <>
+                    <div className="mt-1.5 text-lg font-extrabold">Нов въпрос всеки ден</div>
+                    <p className="mt-1 text-sm font-medium text-white/80">
+                      Тема: „{q.question.slice(0, 46)}{q.question.length > 46 ? "…" : ""}“
+                    </p>
+                    <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-extrabold">
+                      Отговори · +{q.bonusXp} XP <ArrowRight size={15} />
+                    </span>
+                  </>
+                )}
               </div>
-              {dailyDone ? (
-                <>
-                  <div className="mt-1.5 flex items-center gap-2 text-xl font-extrabold">
-                    <CheckCircle2 size={22} /> {state.dailyChallenge?.correct ? "Позна днешния въпрос!" : "Днешният опит е използван"}
-                  </div>
-                  <p className="mt-1 text-sm font-medium text-white/80">
-                    Утре те чака нов въпрос и нов бонус. Не пропускай!
-                  </p>
-                </>
-              ) : (
-                <>
-                  <div className="mt-1.5 text-xl font-extrabold">Всеки ден нов въпрос, нов бонус</div>
-                  <p className="mt-1 text-sm font-medium text-white/80">
-                    Днешната тема: „{q.question.slice(0, 60)}{q.question.length > 60 ? "…" : ""}“
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-extrabold">
-                    Отговори сега · +{q.bonusXp} XP <ArrowRight size={15} />
-                  </span>
-                </>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </button>
 
-        {/* Маскот Аликс — стрелец, изкача извън синята лента (както на Начало) */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/mascots/archer.png"
-          alt="Аликс"
-          draggable={false}
-          className="pointer-events-none absolute right-2 top-1/2 z-20 hidden h-[190px] w-auto -translate-y-[56%] select-none drop-shadow-xl sm:block md:right-6 md:h-[225px]"
-        />
+        {/* Маскот между картите */}
+        <div className="hidden items-end justify-center sm:flex">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/mascots/archer.png"
+            alt="Аликс"
+            draggable={false}
+            className="pointer-events-none -mb-1 h-[165px] w-auto select-none drop-shadow-xl md:h-[185px]"
+          />
         </div>
-      </button>
+
+        {/* Седмично */}
+        <Link href="/learn" className="cursor-pointer transition-transform hover:scale-[1.01]">
+          <Card className={cn(
+            "h-full overflow-hidden border-none text-white",
+            weeklyDoneComplete
+              ? "bg-gradient-to-br from-success to-green-700"
+              : "bg-gradient-to-br from-violet-500 to-violet-700"
+          )}>
+            <CardContent className="relative pt-5 pb-5">
+              <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
+              <div className="relative">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-white/70">
+                  <CalendarDays size={14} /> Седмично предизвикателство
+                </div>
+                <div className="mt-1.5 text-lg font-extrabold">{weekly?.title ?? "Тази седмица"}</div>
+                <p className="mt-1 text-sm font-medium text-white/80">{weekly?.description}</p>
+                {weekly && (
+                  <div className="mt-3 flex items-center gap-2">
+                    <Progress value={(weeklyDone / weekly.target) * 100} className="h-2 flex-1 bg-white/25" barClassName="bg-white" />
+                    <span className="shrink-0 text-xs font-bold tabular-nums text-white/90">{weeklyDone}/{weekly.target}</span>
+                  </div>
+                )}
+                <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-extrabold">
+                  {weeklyDoneComplete ? "Изпълнено!" : "Към уроците"} · +{weekly?.xpReward ?? 0} XP <ArrowRight size={15} />
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+      </div>
 
       {/* Практически мисии */}
       <section className="flex flex-col gap-3">
