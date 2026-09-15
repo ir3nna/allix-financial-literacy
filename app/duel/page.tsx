@@ -200,7 +200,7 @@ export default function DuelPage() {
                         })
                       }
                     >
-                      <Swords size={14} /> Дуел
+                      <Swords size={14} /> Започни дуел
                     </Button>
                   </div>
                 </div>
