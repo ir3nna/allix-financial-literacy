@@ -584,7 +584,7 @@ export default function MissionsPage() {
               src="/mascots/archer.png"
               alt=""
               draggable={false}
-              className="pointer-events-none absolute bottom-0 right-1 h-[145px] w-auto select-none drop-shadow-lg sm:h-[160px] md:h-[180px]"
+              className="pointer-events-none absolute bottom-0 right-1 h-[168px] w-auto select-none drop-shadow-lg sm:h-[184px] md:h-[205px]"
             />
           </Card>
         </button>
