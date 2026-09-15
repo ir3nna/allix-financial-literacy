@@ -66,14 +66,14 @@ export default function LeaderboardPage() {
         </p>
       </div>
 
-      {/* Табове */}
-      <div className="flex rounded-2xl bg-soft p-1">
+      {/* Табове — компактна лента, хваща само колкото съдържанието */}
+      <div className="flex w-fit rounded-2xl bg-soft p-1">
         {TABS.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
             className={cn(
-              "flex-1 rounded-xl py-2 text-sm font-bold transition-all cursor-pointer",
+              "rounded-xl px-6 py-2 text-sm font-bold transition-all cursor-pointer",
               tab === t.key ? "bg-card text-allianz shadow-sm" : "text-muted"
             )}
           >
