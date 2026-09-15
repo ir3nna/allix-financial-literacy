@@ -552,7 +552,7 @@ export default function MissionsPage() {
               ? "bg-gradient-to-br from-success to-green-700"
               : "border-allianz/30 bg-gradient-to-br from-allianz to-allianz-dark"
           )}>
-            <CardContent className="relative pb-5 pr-28 pt-5 sm:pr-32">
+            <CardContent className="relative pb-5 pr-40 pt-5 sm:pr-44 md:pr-56">
               <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
               <div className="relative">
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-white/70">
@@ -584,7 +584,7 @@ export default function MissionsPage() {
               src="/mascots/archer.png"
               alt=""
               draggable={false}
-              className="pointer-events-none absolute bottom-0 right-1 h-[128px] w-auto select-none drop-shadow-lg sm:h-[140px]"
+              className="pointer-events-none absolute bottom-0 right-1 h-[145px] w-auto select-none drop-shadow-lg sm:h-[160px] md:h-[180px]"
             />
           </Card>
         </button>
@@ -597,7 +597,7 @@ export default function MissionsPage() {
               ? "bg-gradient-to-br from-success to-green-700"
               : "bg-gradient-to-br from-violet-500 to-violet-700"
           )}>
-            <CardContent className="relative pb-5 pr-28 pt-5 sm:pr-32">
+            <CardContent className="relative pb-5 pr-40 pt-5 sm:pr-44 md:pr-56">
               <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
               <div className="relative">
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-white/70">
@@ -622,7 +622,7 @@ export default function MissionsPage() {
               src="/mascots/marathon.png"
               alt=""
               draggable={false}
-              className="pointer-events-none absolute bottom-0 right-0 h-[128px] w-auto select-none drop-shadow-lg sm:h-[140px]"
+              className="pointer-events-none absolute bottom-0 right-0 h-[145px] w-auto select-none drop-shadow-lg sm:h-[160px] md:h-[180px]"
             />
           </Card>
         </Link>
