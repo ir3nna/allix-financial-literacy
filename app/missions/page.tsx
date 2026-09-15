@@ -581,7 +581,7 @@ export default function MissionsPage() {
           src="/mascots/archer.png"
           alt="Аликс"
           draggable={false}
-          className="pointer-events-none absolute right-2 top-1/2 z-20 hidden h-[150px] w-auto -translate-y-1/2 select-none drop-shadow-xl sm:block md:right-6 md:h-[180px]"
+          className="pointer-events-none absolute right-2 top-1/2 z-20 hidden h-[190px] w-auto -translate-y-[56%] select-none drop-shadow-xl sm:block md:right-6 md:h-[225px]"
         />
         </div>
       </button>
