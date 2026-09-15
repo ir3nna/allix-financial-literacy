@@ -538,21 +538,21 @@ export default function MissionsPage() {
         <p className="text-sm font-medium text-muted">Изпълнявай предизвикателства, трупай XP</p>
       </div>
 
-      {/* Дневно + Седмично предизвикателство — две карти с маскота между тях */}
-      <div className="grid items-stretch gap-3 sm:grid-cols-[1fr_auto_1fr]">
-        {/* Дневно */}
+      {/* Дневно + Седмично предизвикателство — две карти, всяка с маскота си вътре */}
+      <div className="grid gap-3 sm:grid-cols-2">
+        {/* Дневно — с маскота стрелец вътре */}
         <button
           onClick={() => !dailyDone && setView("daily")}
           disabled={dailyDone}
           className={cn("text-left", !dailyDone && "cursor-pointer transition-transform hover:scale-[1.01]")}
         >
           <Card className={cn(
-            "h-full overflow-hidden text-white",
+            "relative h-full overflow-hidden text-white",
             dailyDone
               ? "bg-gradient-to-br from-success to-green-700"
               : "border-allianz/30 bg-gradient-to-br from-allianz to-allianz-dark"
           )}>
-            <CardContent className="relative pt-5 pb-5">
+            <CardContent className="relative pb-5 pr-28 pt-5 sm:pr-32">
               <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
               <div className="relative">
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-white/70">
@@ -569,7 +569,7 @@ export default function MissionsPage() {
                   <>
                     <div className="mt-1.5 text-lg font-extrabold">Нов въпрос всеки ден</div>
                     <p className="mt-1 text-sm font-medium text-white/80">
-                      Тема: „{q.question.slice(0, 46)}{q.question.length > 46 ? "…" : ""}“
+                      Тема: „{q.question.slice(0, 40)}{q.question.length > 40 ? "…" : ""}“
                     </p>
                     <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-extrabold">
                       Отговори · +{q.bonusXp} XP <ArrowRight size={15} />
@@ -578,29 +578,26 @@ export default function MissionsPage() {
                 )}
               </div>
             </CardContent>
+            {/* Маскот стрелец в картата */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/mascots/archer.png"
+              alt=""
+              draggable={false}
+              className="pointer-events-none absolute bottom-0 right-1 h-[128px] w-auto select-none drop-shadow-lg sm:h-[140px]"
+            />
           </Card>
         </button>
 
-        {/* Маскот между картите */}
-        <div className="hidden items-end justify-center sm:flex">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/mascots/archer.png"
-            alt="Аликс"
-            draggable={false}
-            className="pointer-events-none -mb-1 h-[165px] w-auto select-none drop-shadow-xl md:h-[185px]"
-          />
-        </div>
-
-        {/* Седмично */}
+        {/* Седмично — с маскота маратонец вътре */}
         <Link href="/learn" className="cursor-pointer transition-transform hover:scale-[1.01]">
           <Card className={cn(
-            "h-full overflow-hidden border-none text-white",
+            "relative h-full overflow-hidden border-none text-white",
             weeklyDoneComplete
               ? "bg-gradient-to-br from-success to-green-700"
               : "bg-gradient-to-br from-violet-500 to-violet-700"
           )}>
-            <CardContent className="relative pt-5 pb-5">
+            <CardContent className="relative pb-5 pr-28 pt-5 sm:pr-32">
               <div className="dot-grid pointer-events-none absolute inset-0 opacity-30" />
               <div className="relative">
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-white/70">
@@ -619,6 +616,14 @@ export default function MissionsPage() {
                 </span>
               </div>
             </CardContent>
+            {/* Маскот маратонец в картата */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/mascots/marathon.png"
+              alt=""
+              draggable={false}
+              className="pointer-events-none absolute bottom-0 right-0 h-[128px] w-auto select-none drop-shadow-lg sm:h-[140px]"
+            />
           </Card>
         </Link>
       </div>
