@@ -132,27 +132,32 @@ export function Nav() {
       <Tip label={isDark ? "Светла тема" : "Тъмна тема"} />
     </button>
   ) : (
-    <div className="mb-3 flex rounded-2xl bg-soft p-1" role="group" aria-label="Смяна на тема">
+    <div className="mb-3 flex items-center justify-between gap-2 pl-2">
+      <span className="text-xs font-bold text-muted">Тема</span>
+      <div className="flex rounded-xl bg-soft p-1" role="group" aria-label="Смяна на тема">
       <button
         onClick={() => updateSettings({ theme: "light" })}
         aria-pressed={!isDark}
+        aria-label="Светла тема"
         className={cn(
-          "flex flex-1 items-center justify-center gap-2 rounded-xl py-2 text-xs font-bold transition-all cursor-pointer",
+          "flex h-7 w-7 items-center justify-center rounded-lg transition-all cursor-pointer",
           !isDark ? "bg-card text-allianz shadow-sm" : "text-muted hover:text-fg"
         )}
       >
-        <Sun size={15} /> Светла
+        <Sun size={16} />
       </button>
       <button
         onClick={() => updateSettings({ theme: "dark" })}
         aria-pressed={isDark}
+        aria-label="Тъмна тема"
         className={cn(
-          "flex flex-1 items-center justify-center gap-2 rounded-xl py-2 text-xs font-bold transition-all cursor-pointer",
+          "flex h-7 w-7 items-center justify-center rounded-lg transition-all cursor-pointer",
           isDark ? "bg-card text-allianz shadow-sm" : "text-muted hover:text-fg"
         )}
       >
-        <Moon size={15} /> Тъмна
+        <Moon size={16} />
       </button>
+      </div>
     </div>
   );
 
@@ -208,10 +213,10 @@ export function Nav() {
                   collapsed ? "justify-center py-2.5" : "gap-3 px-4 py-2.5",
                   active
                     ? "bg-allianz text-white shadow-lg shadow-allianz/30"
-                    : "text-fg hover:bg-soft"
+                    : "text-fg/70 hover:bg-soft hover:text-fg"
                 )}
               >
-                <Icon size={20} strokeWidth={active ? 2.5 : 2} className={active ? "text-blue-200" : "text-allianz/60"} />
+                <Icon size={20} strokeWidth={active ? 2.5 : 2} className={active ? "text-blue-200" : "text-allianz/70"} />
                 {collapsed ? <Tip label={label} /> : label}
               </Link>
             );
@@ -256,10 +261,10 @@ export function Nav() {
                   collapsed ? "justify-center py-3" : "gap-3 px-4 py-3",
                   active
                     ? "bg-allianz text-white shadow-lg shadow-allianz/30"
-                    : "text-fg hover:bg-soft"
+                    : "text-fg/70 hover:bg-soft hover:text-fg"
                 )}
               >
-                <Icon size={23} strokeWidth={active ? 2.5 : 2} className={active ? "text-blue-200" : "text-allianz/60"} />
+                <Icon size={23} strokeWidth={active ? 2.5 : 2} className={active ? "text-blue-200" : "text-allianz/70"} />
                 {collapsed ? <Tip label={label} /> : label}
               </Link>
             );
